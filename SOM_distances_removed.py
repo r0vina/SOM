@@ -35,22 +35,19 @@ def neighbourhood_coordinates(winning_index, radius, weights_size):
     
 
 def valid_coords_check(coords, matrix):
-    # print('check_coords',coords)
     good_coords = []
     for coord in coords:
-        # print('coord in coords', coord)
+
         if coord[0] < 0 or coord[1] < 0:
             continue
         else:
             try:
                 matrix[coord[0]][coord[1]]
             except:
-                # print('Invalid Coords Found', coord[0],coord[1])
+ 
                 continue
             else:
                 good_coords.append(coord)
-    # print(valid_coords, 'validCoords')
-    # print(good_coords)
     return good_coords
             
             
@@ -71,9 +68,9 @@ def euclid_dist(array1, array2):
     distance = []
     for i in range(0, len(array1)):
         dist =(array1[i]-array2[i])**2
-        # print(dist)
+
         distance.append(dist)
-        # print(distance)
+
     return math.sqrt(np.sum(distance))
    
     
@@ -108,7 +105,6 @@ av_minus_timestamp = av_minus_timestamp.sort_values(by=['Timestamp'])
 del av_minus_timestamp['Timestamp']
 av_minus_timestamp['sessionLengthInSeconds'] = location_and_time_session_length
 av_minus_timestamp = av_minus_timestamp.sort_values(by=['sessionLengthInSeconds']) 
-# print(av_minus_timestamp)
 del av_minus_timestamp['sessionLengthInSeconds']
 av_matrix = av_minus_timestamp.to_numpy()
 
@@ -120,7 +116,7 @@ weights = np.random.rand(3,3,8)
 weights_size = len(weights)
 winning_weights = []
 radius = 3
-# print('before', weights)
+
 learning_rate = 0.9
 iterations = 10000
 weights_norm = np.linalg.norm(weights, axis=2)
@@ -129,12 +125,11 @@ ax.set_title('before')
 plt.show()
 for i in range (0, iterations):
     print(radius, ':radius', i, ':index')
-    # print(i)
     for row in av_matrix:
         distance = 0
         x_coor = 0
         y_coor = 0
-        # distances = np.random.rand(len(weights),len(weights))
+
         for rowIndex in range(len(weights)):
             for elementIndex in range(len(weights[rowIndex])):
          
@@ -143,23 +138,15 @@ for i in range (0, iterations):
                     distance = dist
                     x_coor = rowIndex
                     y_coor = elementIndex
-        
-                
-                # input('Press enter 1')
-        # print('distances', distances)
+
         winning_index = [x_coor,y_coor]
         
-        # print(distances)
-        # print('winner',weights[winning_index])
-        # print('winnerIndex',winning_index, i)
-        
-
     winner = weights[winning_index]
     neighbour_coords = neighbourhood_coordinates(winning_index, radius, weights_size)
-    # print(neighbour_coords, 'neighbour')
+
     
     valid_coords = valid_coords_check(neighbour_coords, weights)
-    # print('valid_coords', valid_coords)
+
     radius = temporal_decay(iterations, i, len(weights))
     
     for coords in valid_coords:
@@ -175,11 +162,3 @@ ax2.set_title('after')
 ax2.pcolormesh(weights_norm, cmap='hot') 
 plt.show()
 weights.tofile('weights')   
-# print('after', weights)
-# print(len(winning_weights))
-
-
-
-# index = cluster_assignment(av_matrix, weights)
-# print(np.size(index))
-# print(weights[index])
